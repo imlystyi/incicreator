@@ -1,5 +1,7 @@
 
 using InciCreator.DbContexts;
+using InciCreator.Services;
+using InciCreator.Services.Implementations;
 using Microsoft.EntityFrameworkCore;
 
 namespace InciCreator
@@ -22,6 +24,8 @@ namespace InciCreator
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
             });
 
+            builder.Services.AddScoped<IApplicationService, ApplicationService>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -34,7 +38,6 @@ namespace InciCreator
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
