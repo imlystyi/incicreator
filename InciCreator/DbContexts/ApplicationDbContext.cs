@@ -25,4 +25,19 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                     .WithMany(c => c.Accounts)
                     .HasForeignKey(a => a.ContactId);
     }
+
+    #nullable enable
+
+    public async Task<Contact?> FindContactByEmail(string email) => await this.Contacts.FirstOrDefaultAsync(c => c.Email == email);
+
+    public async Task<Account?> FindAccountByName(string name) => await this.Accounts.FirstOrDefaultAsync(a => a.Name == name);
+
+    public bool UpdateContact(Contact contact) => this.Contacts.Update(contact).State == EntityState.Modified;
+
+    public bool UpdateAccount(Account account) => this.Accounts.Update(account).State == EntityState.Modified;
+
+    public void CreateContact(Contact contact) => this.Contacts.Add(contact);
+
+    public void CreateIncident(Incident incident) => this.Incidents.Add(incident);
+
 }
