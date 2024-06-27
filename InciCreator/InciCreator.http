@@ -1,6 +1,0 @@
-@InciCreator_HostAddress = http://localhost:5249
-
-GET {{InciCreator_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
