@@ -7,7 +7,6 @@ namespace InciCreator.Models.Entities;
 public class Incident
 {
     [Column("name")]
-    [MaxLength(31)]
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public string Name { get; set; }
