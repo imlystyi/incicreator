@@ -33,14 +33,14 @@ public class ApplicationService(ApplicationDbContext dbContext) : IApplicationSe
                 LastName = creationRequest.ContactLastName,
                 Email = creationRequest.ContactEmail
             });
+
+            dbContext.CreateIncident(new() { Account = account, Description = creationRequest.IncidentDescription });
         }
 
         account.Contact = contact;
 
         if (!dbContext.UpdateAccount(account))
             throw new("Failed to update account.");
-
-        dbContext.CreateIncident(new() { Account = account, Description = creationRequest.IncidentDescription });
 
         await dbContext.SaveChangesAsync();
     }
