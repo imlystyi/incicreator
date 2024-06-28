@@ -9,10 +9,13 @@ public class ApplicationService(ApplicationDbContext dbContext) : IApplicationSe
 {
     public async Task CreateRecords(CreationRequest creationRequest)
     {
-        Account account = await dbContext.FindAccountByName(creationRequest.AccountName) ??
+        Account account = dbContext.FindAccountByName(creationRequest.AccountName).Result ??
                           throw new AccountNotFoundException();
+#nullable enable
 
-        Contact contact = await dbContext.FindContactByEmail(creationRequest.ContactEmail);
+        Contact? contact = await dbContext.FindContactByEmail(creationRequest.ContactEmail);
+
+#nullable restore
 
         if (contact != null)
         {
@@ -24,7 +27,7 @@ public class ApplicationService(ApplicationDbContext dbContext) : IApplicationSe
         }
         else
         {
-            dbContext.CreateContact(new()
+            contact = dbContext.CreateContact(new()
             {
                 FirstName = creationRequest.ContactFirstName,
                 LastName = creationRequest.ContactLastName,

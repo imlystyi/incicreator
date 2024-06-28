@@ -26,11 +26,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     #region Sets
 
-    private DbSet<Contact> Contacts { get; }
+    private DbSet<Contact> Contacts { get; set; }
 
-    private DbSet<Account> Accounts { get; }
+    private DbSet<Account> Accounts { get; set; }
 
-    private DbSet<Incident> Incidents { get; }
+    private DbSet<Incident> Incidents { get; set; }
 
     #endregion
 
@@ -42,13 +42,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public async Task<Account?> FindAccountByName(string name) => await this.Accounts.FirstOrDefaultAsync(a => a.Name == name);
 
-#nullable restore
-
     public bool UpdateContact(Contact contact) => this.Contacts.Update(contact).State == EntityState.Modified;
 
     public bool UpdateAccount(Account account) => this.Accounts.Update(account).State == EntityState.Modified;
 
-    public void CreateContact(Contact contact) => this.Contacts.Add(contact);
+    public Contact CreateContact(Contact contact) => this.Contacts.Add(contact).Entity;
 
     public void CreateIncident(Incident incident) => this.Incidents.Add(incident);
 
