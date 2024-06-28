@@ -5,11 +5,7 @@ namespace InciCreator.DbContexts;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
-    public DbSet<Contact> Contacts { get; set; }
-
-    public DbSet<Account> Accounts { get; set; }
-
-    public DbSet<Incident> Incidents { get; set; }
+    #region Overrides
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -26,11 +22,27 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                     .HasForeignKey(a => a.ContactId);
     }
 
-    #nullable enable
+    #endregion
+
+    #region Sets
+
+    private DbSet<Contact> Contacts { get; }
+
+    private DbSet<Account> Accounts { get; }
+
+    private DbSet<Incident> Incidents { get; }
+
+    #endregion
+
+    #region Methods
+
+#nullable enable
 
     public async Task<Contact?> FindContactByEmail(string email) => await this.Contacts.FirstOrDefaultAsync(c => c.Email == email);
 
     public async Task<Account?> FindAccountByName(string name) => await this.Accounts.FirstOrDefaultAsync(a => a.Name == name);
+
+#nullable restore
 
     public bool UpdateContact(Contact contact) => this.Contacts.Update(contact).State == EntityState.Modified;
 
@@ -40,4 +52,5 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public void CreateIncident(Incident incident) => this.Incidents.Add(incident);
 
+    #endregion
 }
